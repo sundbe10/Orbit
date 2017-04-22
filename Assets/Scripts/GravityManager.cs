@@ -47,7 +47,7 @@ public class GravityManager : MonoBehaviour {
 		}
 	}
 
-	void Update() {
+	void FixedUpdate() {
 		Vector2 maxCharacterPullForce = Vector2.zero;
 		GameObject charAttachedPlanet = null;
 		if (character != null)
