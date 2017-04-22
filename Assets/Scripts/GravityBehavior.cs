@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class GravityBehavior : MonoBehaviour {
 	
-	public Rigidbody2D body;
-	public float mass;
-
+	[HideInInspector] public Rigidbody2D body;
+	[HideInInspector] public float mass;
+	[HideInInspector] public float radius;
+	public bool hasGravity;
+	public bool isAffectedByGravity;
 
 	// Use this for initialization
-	void Start () {
+	public virtual void Start () {
 		body = this.GetComponent<Rigidbody2D>();
 		mass = body.mass;
 		GravityManager.RegisterGravityObject(this);
+		radius = transform.localScale.x;
 
 		// Uncomment below to add random starting force
 		//body.AddForce(new Vector2(Random.Range(-200f,200f), Random.Range(-200f,200f)));
@@ -20,6 +23,6 @@ public class GravityBehavior : MonoBehaviour {
 
 	public Vector2 GetPosition()
 	{
-		return body.position;
+		return transform.position;
 	}
 }
