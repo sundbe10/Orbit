@@ -24,6 +24,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 
 	void CreateSun(){
 		sun = Instantiate(sunObject, transform.position, Quaternion.identity) as GameObject;
+		sun.transform.parent = transform;
 	}
 
 	void CreatePlanets(int numPlanets){
@@ -42,6 +43,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 		Debug.Log(planetVector);
 
 		GameObject newPlanet = Instantiate(planetObject, planetPosition, Quaternion.identity) as GameObject;
+		newPlanet.transform.parent = transform;
 
 		// Add normal force to create orbit 
 		Vector2 normalVector = new Vector2(planetVector.y, -planetVector.x);

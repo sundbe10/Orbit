@@ -52,7 +52,8 @@ public class ProceduralGridBehavior : MonoBehaviour {
 	void CreateObjects(){
 		foreach(ProceduralObject pObject in proceduralObjects){
 			if(Random.value < pObject.frequency){
-				Instantiate(pObject.spawnObject, transform.position+ new Vector3(Random.Range(-gridWidth/3, gridWidth/3), Random.Range(-gridHeight/3, gridHeight/3),  0), Quaternion.identity);
+				GameObject newObject = Instantiate(pObject.spawnObject, transform.position+ new Vector3(Random.Range(-gridWidth/3, gridWidth/3), Random.Range(-gridHeight/3, gridHeight/3),  0), Quaternion.identity) as GameObject;
+				newObject.transform.parent = transform;
 			}
 		}
 	}
