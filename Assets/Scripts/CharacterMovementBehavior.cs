@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class CharacterMovementBehavior : MonoBehaviour {
 
-	float acceleration = 5f;
+	float acceleration = 1f;
 	float maxjumpForce = 4000f;
+	float pushForce = 50f;
 	float jumpForce;
 	float angVelocity;
 	Vector2 gravVelocity;
 	float maxSpeed = 5f;
-	public bool isGrounded;
-	public GameObject attachedPlanet;
+	[HideInInspector] public bool isGrounded;
+	[HideInInspector] public GameObject attachedPlanet;
 	float characterGravityConstant = 10E-5f;
 
 	// Use this for initialization
@@ -24,22 +25,37 @@ public class CharacterMovementBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Walking
-		if (Input.GetAxis("Horizontal") < 0 && angVelocity > (isGrounded ? -maxSpeed : -maxSpeed/2f))
+
+		// Jumping
+		if (Input.GetButton("Jump") && jumpForce > 0f)
 		{
-			angVelocity -= acceleration*Time.deltaTime;
+			Vector2 jumpVec = (transform.position - attachedPlanet.transform.position) * jumpForce;
+			Fall(jumpVec);
+			jumpForce = Mathf.Lerp(jumpForce,0,15f*Time.deltaTime);
+			if (isGrounded)
+			{
+				Debug.Log("Exit!");
+				isGrounded = false;
+				transform.parent = null;
+			}
 		}
-		else if (Input.GetAxis("Horizontal") > 0 && angVelocity < (isGrounded ? maxSpeed : maxSpeed/2f))
+
+		// Walking
+		if (Input.GetAxis("Horizontal") < 0 && angVelocity >  -maxSpeed)
 		{
-			angVelocity += acceleration*Time.deltaTime;
+			angVelocity = Mathf.Lerp(angVelocity, -maxSpeed, acceleration*Time.deltaTime);
+		}
+		else if (Input.GetAxis("Horizontal") > 0 && angVelocity < maxSpeed)
+		{
+			angVelocity = Mathf.Lerp(angVelocity, maxSpeed, acceleration*Time.deltaTime);
 		}
 		else if (angVelocity != 0)
 			angVelocity = Mathf.Lerp(angVelocity, 0f, acceleration*Time.deltaTime);
 		else
 			angVelocity = 0f;
 
-		float radius = Vector2.Distance((Vector2)transform.localPosition, attachedPlanet.transform.position);
-		transform.RotateAround(attachedPlanet.transform.position, Vector3.forward, -angVelocity/radius);
+		float radius = Vector2.Distance((Vector2)transform.position, attachedPlanet.transform.position);
+		transform.RotateAround(attachedPlanet.transform.position, Vector3.forward, -angVelocity/(radius*radius));
 
 		// Auto-turning
 		if (attachedPlanet != null)
@@ -48,12 +64,11 @@ public class CharacterMovementBehavior : MonoBehaviour {
 			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(distanceVec)), Mathf.Pow(3/distanceVec.magnitude,3f));
 		}
 
-		// Jumping
-		if (Input.GetButton("Jump") && jumpForce > 0f)
+		// Blowing
+		if (Input.GetButton("Fire3") && isGrounded)
 		{
-			Vector2 jumpVec = (transform.position - attachedPlanet.transform.position) * jumpForce;
-			Fall(jumpVec);
-			jumpForce = Mathf.Lerp(jumpForce,0,15f*Time.deltaTime);
+			Vector2 force = (attachedPlanet.transform.position - transform.position).normalized*pushForce;
+			attachedPlanet.GetComponent<Rigidbody2D>().AddForce(force);
 		}
 	}
 
@@ -71,12 +86,7 @@ public class CharacterMovementBehavior : MonoBehaviour {
 			gravVelocity = Vector2.zero;
 			isGrounded = true;
 			jumpForce = maxjumpForce;
+			transform.parent = attachedPlanet.transform;
 		}
-	}
-
-	void OnCollisionExit2D(Collision2D col)
-	{
-		if (isGrounded && col.gameObject.tag == "Planet")
-			isGrounded = false;
 	}
 }
