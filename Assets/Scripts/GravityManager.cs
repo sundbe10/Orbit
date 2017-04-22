@@ -28,6 +28,10 @@ public class GravityManager : MonoBehaviour {
 		}
 	}
 
+	public static void RemoveGravityObject(GravityBehavior obj) {
+		gravityObjects.Remove(obj);
+	}
+
 	public static void UnregisterGravityObject(GravityBehavior obj) {
 		if (gravityObjects.Contains(obj))
 		{
