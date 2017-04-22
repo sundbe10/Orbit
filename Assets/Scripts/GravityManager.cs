@@ -6,7 +6,7 @@ public class GravityManager : MonoBehaviour {
 
 	private static GravityManager instance = null;
 	private static List<GravityBehavior> gravityObjects;
-	public static float G = 6.67408E-11f;
+	public static float G = 6.67408E-11f * 10E10f;
 
 	public static GravityManager SharedInstance {
 		get {
@@ -47,7 +47,7 @@ public class GravityManager : MonoBehaviour {
 
 		float radius = Vector2.Distance(pos1, pos2);
 
-		Vector2 force = (pos1 - pos2).normalized * 10E10f * (G * obj1.mass * obj2.mass) / (radius * radius);
+		Vector2 force = (pos1 - pos2).normalized * (G * obj1.mass * obj2.mass) / (radius * radius);
 
 		obj2.body.AddForce(force);
 	}

@@ -57,7 +57,6 @@ public class ProceduralGridManager : Singleton<ProceduralGridManager> {
 	void CreateBorderGrids(Grid targetGrid){
 		for(int i = -1; i <= 1; i++){
 			for(int j = -1; j <= 1; j++){
-				Debug.Log(i);
 				if(i != 0 || j!= 0){
 					if(!GridExistsAtLocator(targetGrid.xLocator + i, targetGrid.yLocator + j)){
 						CreateGrid(targetGrid.gridObject.transform.position + new Vector3(i*gridWidth,j*gridHeight,0), targetGrid.xLocator + i, targetGrid.yLocator + j);

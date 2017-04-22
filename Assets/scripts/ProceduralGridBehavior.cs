@@ -7,10 +7,11 @@ public class ProceduralGridBehavior : MonoBehaviour {
 	[System.Serializable]
 	public class ProceduralObject{
 		public GameObject spawnObject;
-		public int frequency;
+		[Range(0,1)]
+		public float frequency;
 	}
 		
-	public ProceduralObject[] proeduralObjects;
+	public ProceduralObject[] proceduralObjects;
 	public float gridHeight;
 	public float gridWidth;
 
@@ -19,7 +20,7 @@ public class ProceduralGridBehavior : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		CreateObjects();
 	}
 	
 	// Update is called once per frame
@@ -33,7 +34,6 @@ public class ProceduralGridBehavior : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D collider){
-		Debug.Log("Collide!");
 		if(collider.gameObject.tag == "Player"){
 			ProceduralGridManager.UpdateGrid(xLocator, yLocator);
 		}
@@ -47,5 +47,13 @@ public class ProceduralGridBehavior : MonoBehaviour {
 
 		BoxCollider2D collider = GetComponent<BoxCollider2D>();
 		collider.size = new Vector2(width, height);
+	}
+
+	void CreateObjects(){
+		foreach(ProceduralObject pObject in proceduralObjects){
+			if(Random.value < pObject.frequency){
+				Instantiate(pObject.spawnObject, transform.position+ new Vector3(Random.Range(-gridWidth/3, gridWidth/3), Random.Range(-gridHeight/3, gridHeight/3),  0), Quaternion.identity);
+			}
+		}
 	}
 }
