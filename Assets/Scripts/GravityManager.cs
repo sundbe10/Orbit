@@ -45,7 +45,9 @@ public class GravityManager : MonoBehaviour {
 
 	void Update() {
 		Vector2 maxCharacterPullForce = Vector2.zero;
-		GameObject charAttachedPlanet = charMovement.attachedPlanet;
+		GameObject charAttachedPlanet = null;
+		if (character != null)
+			charAttachedPlanet = charMovement.attachedPlanet;
 
 		// Planet forces
 		foreach(GravityBehavior giveObj in gravityObjects)
@@ -77,7 +79,8 @@ public class GravityManager : MonoBehaviour {
 				}
 			}
 		}
-		charMovement.attachedPlanet = charAttachedPlanet;
+		if (character != null)
+			charMovement.attachedPlanet = charAttachedPlanet;
 	}
 		
 	Vector2 ApplyPullForce(GravityBehavior obj1, GravityBehavior obj2)
@@ -108,7 +111,10 @@ public class GravityManager : MonoBehaviour {
 
 	void OnDrawGizmos()
 	{
-		Gizmos.color = Color.yellow;
-		Gizmos.DrawSphere(charMovement.attachedPlanet.transform.position, .5f);
+		if (character != null)
+		{
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawSphere(charMovement.attachedPlanet.transform.position, 0.5f);
+		}
 	}
 }
