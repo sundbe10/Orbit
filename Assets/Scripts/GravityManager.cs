@@ -25,7 +25,13 @@ public class GravityManager : MonoBehaviour {
 		if (!gravityObjects.Contains(obj))
 		{
 			gravityObjects.Add(obj);
-			Debug.Log("Gravity Object added!");
+		}
+	}
+
+	public static void UnregisterGravityObject(GravityBehavior obj) {
+		if (gravityObjects.Contains(obj))
+		{
+			gravityObjects.Remove(obj);
 		}
 	}
 
