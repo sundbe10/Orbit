@@ -68,9 +68,10 @@ public class GravityManager : MonoBehaviour {
 				}
 				
 				// Character-specific forces from each planet
-				if (character != null && Vector2.Distance(character.GetFootPosition(), giveObj.GetPosition()) > giveObj.radius)
+				if (character != null)
 				{
-					Vector2 force = ApplyCharacterPull(giveObj);
+					Vector2 force = CalculateCharacterPull(giveObj, !charMovement.isGrounded);
+					
 					if (force.sqrMagnitude > maxCharacterPullForce.sqrMagnitude)
 					{
 						maxCharacterPullForce = force;
@@ -96,7 +97,7 @@ public class GravityManager : MonoBehaviour {
 		return force;
 	}
 
-	Vector2 ApplyCharacterPull(GravityBehavior obj1)
+	Vector2 CalculateCharacterPull(GravityBehavior obj1, bool apply)
 	{
 		Vector2 pos1 = obj1.GetPosition();
 		Vector2 pos2 = character.GetPosition();
@@ -105,7 +106,9 @@ public class GravityManager : MonoBehaviour {
 
 		Vector2 force = (pos1 - pos2).normalized * (G * obj1.mass * character.mass) / (radius * radius);
 
-		character.GetComponent<CharacterMovementBehavior>().Fall(force);
+		if (apply)
+			character.GetComponent<CharacterMovementBehavior>().Fall(force);
+		
 		return force;
 	}
 

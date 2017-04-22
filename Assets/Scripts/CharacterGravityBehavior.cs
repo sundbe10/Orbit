@@ -10,8 +10,4 @@ public class CharacterGravityBehavior : GravityBehavior {
 		mass = 10f;
 		GravityManager.RegisterGravityObject(this, true);
 	}
-
-	public Vector2 GetFootPosition() {
-		return (Vector2)transform.localPosition - Vector2.up;
-	}
 }
