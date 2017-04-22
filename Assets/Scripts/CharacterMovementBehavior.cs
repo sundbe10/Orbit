@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class CharacterMovementBehavior : MonoBehaviour {
 
-	float acceleration = 10f;
-	float maxjumpForce = 5000f;
+	float acceleration = 5f;
+	float maxjumpForce = 4000f;
 	float jumpForce;
 	float angVelocity;
 	Vector2 gravVelocity;
-	float maxSpeed = 2f;
+	float maxSpeed = 5f;
 	public bool isGrounded;
 	public GameObject attachedPlanet;
-	float characterGravityConstant = 10E-4f;
+	float characterGravityConstant = 10E-5f;
 
 	// Use this for initialization
 	void Awake () {
@@ -25,11 +25,11 @@ public class CharacterMovementBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Walking
-		if (Input.GetAxis("Horizontal") < 0 && angVelocity > -maxSpeed)
+		if (Input.GetAxis("Horizontal") < 0 && angVelocity > (isGrounded ? -maxSpeed : -maxSpeed/2f))
 		{
 			angVelocity -= acceleration*Time.deltaTime;
 		}
-		else if (Input.GetAxis("Horizontal") > 0 && angVelocity < maxSpeed)
+		else if (Input.GetAxis("Horizontal") > 0 && angVelocity < (isGrounded ? maxSpeed : maxSpeed/2f))
 		{
 			angVelocity += acceleration*Time.deltaTime;
 		}
@@ -43,17 +43,18 @@ public class CharacterMovementBehavior : MonoBehaviour {
 
 		// Auto-turning
 		if (attachedPlanet != null)
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(transform.position - attachedPlanet.transform.position)), 5f);
+		{
+			Vector3 distanceVec = transform.position - attachedPlanet.transform.position;
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(distanceVec)), Mathf.Pow(3/distanceVec.magnitude,3f));
+		}
 
 		// Jumping
 		if (Input.GetButton("Jump") && jumpForce > 0f)
 		{
 			Vector2 jumpVec = (transform.position - attachedPlanet.transform.position) * jumpForce;
 			Fall(jumpVec);
-			jumpForce = Mathf.Lerp(jumpForce,0,50f*Time.deltaTime);
+			jumpForce = Mathf.Lerp(jumpForce,0,15f*Time.deltaTime);
 		}
-
-		Debug.Log(gravVelocity);
 	}
 
 	public void Fall(Vector2 force)
@@ -65,9 +66,8 @@ public class CharacterMovementBehavior : MonoBehaviour {
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-		if (col.gameObject.tag == "planet")
+		if (col.gameObject.tag == "Planet")
 		{
-			Debug.Log("Hit!!!!");
 			gravVelocity = Vector2.zero;
 			isGrounded = true;
 			jumpForce = maxjumpForce;
@@ -76,7 +76,7 @@ public class CharacterMovementBehavior : MonoBehaviour {
 
 	void OnCollisionExit2D(Collision2D col)
 	{
-		if (isGrounded && col.gameObject.tag == "planet")
+		if (isGrounded && col.gameObject.tag == "Planet")
 			isGrounded = false;
 	}
 }
