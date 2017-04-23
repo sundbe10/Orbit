@@ -6,10 +6,12 @@ public class PlayerSoundBehavior : MonoBehaviour {
 
 	AudioSource playerAudio;
 	public List<AudioClip> impacts;
+	public UnityEngine.Audio.AudioMixerGroup master;
 
 	// Use this for initialization
 	void Start () {
 		playerAudio = gameObject.AddComponent<AudioSource>();
+		playerAudio.outputAudioMixerGroup = master;
 	}
 
 	void OnCollisionEnter2D(Collision2D col)

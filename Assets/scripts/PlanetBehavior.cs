@@ -46,7 +46,7 @@ public class PlanetBehavior : GravityBehavior {
 		size = Random.Range(planetTemplate.minSize, planetTemplate.maxSize);
 		transform.localScale = Vector3.one * size;
 		UpdateMass(mass * size + 1);
-		planetAudio.pitch = Mathf.Clamp(1.5f/size,.4f,1.5f);
+		planetAudio.pitch = ScaleClamp(size, planetTemplate.minSize, planetTemplate.maxSize, 1.4f, .7f);
 		planetAudio.volume = 0f;
 	}
 
@@ -68,10 +68,10 @@ public class PlanetBehavior : GravityBehavior {
 		float soundDistance = Vector2.Distance(listener.transform.position, transform.position);
 		if (soundDistance < planetAudio.maxDistance)
 		{
-			cutoff = Mathf.SmoothStep(cutoff, Mathf.Clamp((soundDistance-1f)*50f, 20f, 400f), 10*Time.deltaTime);
+			cutoff = ScaleClamp(soundDistance, 2f, 8f, 20f, 400f);
 			hiPass.cutoffFrequency = cutoff;
-			volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/75f)*0.4f + 0.6f*(listenerBody.velocity - body.velocity).sqrMagnitude/75f, 10*Time.deltaTime);
-			planetAudio.volume = Mathf.Clamp(volume, 0f, 0.85f);
+			volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/50f)*0.3f + 0.7f*(listenerBody.velocity - body.velocity).sqrMagnitude/50f, 10*Time.deltaTime);
+			planetAudio.volume = Mathf.Clamp(volume, 0f, 0.9f);
 		}
 	}
 
@@ -86,5 +86,10 @@ public class PlanetBehavior : GravityBehavior {
 		GameObject go = Instantiate(offspring, transform, false);
 		go.transform.RotateAround(transform.position, Vector3.forward, Random.Range(0f, 359f));
 		++population;
+	}
+
+	float ScaleClamp(float input, float inMin, float inMax, float outMin, float outMax)
+	{
+		return (((Mathf.Clamp(input, inMin, inMax) - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
 	}
 }

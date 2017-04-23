@@ -24,6 +24,7 @@ public class SunBehavior: MonoBehaviour {
 	MeshRenderer topMesh;
 	MeshRenderer surfaceMesh;
 	bool canAge = false;
+	SunSoundBehavior sunSound;
 
 	// Use this for initialization
 	void Start () {
@@ -32,6 +33,7 @@ public class SunBehavior: MonoBehaviour {
 		surfaceMesh = transform.Find("Body/Surface").GetComponent<MeshRenderer>();
 		CloneMesh(topMesh);
 		CloneMesh(surfaceMesh);
+		sunSound = GetComponent<SunSoundBehavior>();
 
 		currentLifetime = Random.Range(0, totalLifetime * 0.5f);
 	}
@@ -40,6 +42,7 @@ public class SunBehavior: MonoBehaviour {
 	void FixedUpdate () {
 		UpdatePhase();
 		if(currentLifetime >= totalLifetime) Explode();
+		sunSound.size = bodyTransform.localScale.x;
 	}
 
 	public void StartAging(){
@@ -66,6 +69,9 @@ public class SunBehavior: MonoBehaviour {
 
 			bodyTransform.localScale = Vector3.one * Mathf.Lerp(bodyTransform.localScale.x, currentPhase.size, Time.deltaTime);
 		}
+
+		if (currentPhase == starPhases[3] && !sunSound.isCollapsing)
+			sunSound.Collapse();
 	}
 
 	void CloneMesh(MeshRenderer childMesh){
