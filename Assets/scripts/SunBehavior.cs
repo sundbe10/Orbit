@@ -23,6 +23,7 @@ public class SunBehavior: MonoBehaviour {
 	Transform bodyTransform;
 	MeshRenderer topMesh;
 	MeshRenderer surfaceMesh;
+	bool canAge = false;
 
 	// Use this for initialization
 	void Start () {
@@ -31,16 +32,24 @@ public class SunBehavior: MonoBehaviour {
 		surfaceMesh = transform.Find("Body/Surface").GetComponent<MeshRenderer>();
 		CloneMesh(topMesh);
 		CloneMesh(surfaceMesh);
+
+		currentLifetime = Random.Range(0, totalLifetime * 0.75f);
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 		UpdatePhase();
-		if(currentLifetime == totalLifetime) Explode();
+		if(currentLifetime >= totalLifetime) Explode();
+	}
+
+	public void StartAging(){
+		canAge = true;
 	}
 
 	void UpdatePhase(){
-		if(currentLifetime < totalLifetime) currentLifetime ++ ;
+		if(canAge){
+			if(currentLifetime < totalLifetime) currentLifetime ++ ;
+		}
 		StarPhase currentPhase = null;
 		foreach(StarPhase starPhase in starPhases){
 			if(currentLifetime <= totalLifetime* starPhase.lifePercentMax && currentPhase == null){

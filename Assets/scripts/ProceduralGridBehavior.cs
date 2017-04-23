@@ -36,6 +36,12 @@ public class ProceduralGridBehavior : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D collider){
 		if(collider.gameObject.tag == "Player"){
 			ProceduralGridManager.UpdateGrid(xLocator, yLocator);
+			Debug.Log("Enter Grid");
+			SunBehavior sunBehavior = GetComponentInChildren<SunBehavior>();
+			if(sunBehavior != null){
+				Debug.Log("start aging!");
+				sunBehavior.StartAging();
+			}
 		}
 	}
 
