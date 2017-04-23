@@ -42,8 +42,6 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 		Vector3 planetVector = Rot * Vector3.right;
 		Vector3 planetPosition = sun.transform.position + planetVector * randomDistance;
 
-		Debug.Log(planetVector);
-
 		GameObject newPlanet = Instantiate(planetObject, planetPosition, Quaternion.identity) as GameObject;
 		newPlanet.transform.parent = sun.transform;
 

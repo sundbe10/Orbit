@@ -29,6 +29,9 @@ public class RockBehavior : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		currentSunTime = maxSunTime/3;
+
 		cloudMesh = transform.Find("Clouds").GetComponent<MeshRenderer>();
 		groundMesh = transform.Find("Ground").GetComponent<MeshRenderer>();
 		emitter = GetComponentInChildren<ParticleSystem>();
@@ -72,6 +75,15 @@ public class RockBehavior : MonoBehaviour {
 		}
 	}
 
+	void OnCollisionEnter2D(Collision2D collision){
+		Debug.Log("collide");
+		if(collision.collider.tag == "Star"){
+			currentSunTime = 0;
+		}else if(collision.collider.tag == "Planet"){
+			currentSunTime -= maxSunTime/8;
+		}
+	}
+
 	void UpdatePhase(){
 		PlanetPhase currentPhase = null;
 		foreach(PlanetPhase planetPhase in planetPhases){
@@ -92,4 +104,5 @@ public class RockBehavior : MonoBehaviour {
 			emitter.enableEmission = false;
 		}
 	}
+
 }
