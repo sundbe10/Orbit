@@ -28,7 +28,7 @@ public class PlayerUIController : MonoBehaviour {
 
 	void FixedUpdate(){
 		score.text = GameManager.years + " Million Years";
-		healthbar.localPosition = new Vector2(-500*GameManager.health/GameManager.maxHealth, 0);
+		healthbar.localPosition = new Vector2(-500+500*GameManager.health/GameManager.maxHealth, 0);
 		healthbarImage.color = Color32.Lerp(failureColor, successColor, GameManager.health/GameManager.maxHealth);
 	}	
 }
