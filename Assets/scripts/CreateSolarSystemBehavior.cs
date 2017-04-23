@@ -43,7 +43,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 		Debug.Log(planetVector);
 
 		GameObject newPlanet = Instantiate(planetObject, planetPosition, Quaternion.identity) as GameObject;
-		newPlanet.transform.parent = transform;
+		newPlanet.transform.parent = sun.transform;
 
 		// Add normal force to create orbit 
 		Vector2 normalVector = new Vector2(planetVector.y, -planetVector.x);

@@ -45,7 +45,7 @@ public class BackgroundStarManager : MonoBehaviour {
 			float y = Random.Range(-0.5f*frustrumHeight, 0.5f*frustrumHeight);
 			s.transform.position = new Vector3(x,y,z);
 			float size = ScaledValue(z, minDistance, maxDistance);
-			s.transform.localScale *= size*25;
+			s.transform.localScale *= size*5;
 			s.transform.parent = backgroundStars.transform;
 			stars.Add(s);
 		}

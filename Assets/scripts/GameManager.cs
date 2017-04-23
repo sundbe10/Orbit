@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager> {
 
 	static public int years = 0;
+	static public float health = 50;
+	static public float maxHealth = 100;
 
 	int yearCounter;
 
