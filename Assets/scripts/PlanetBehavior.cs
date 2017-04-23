@@ -15,6 +15,8 @@ public class PlanetBehavior : GravityBehavior {
 	public int population;
 	public PlanetTemplate[] planetTemplates;
 	public float size;
+	public GameObject explosionObject;
+
 	AudioHighPassFilter hiPass;
 	AudioListener listener;
 	Rigidbody2D listenerBody;
@@ -23,8 +25,6 @@ public class PlanetBehavior : GravityBehavior {
 	float volume;
 
 	public float distance;
-
-
 
 	public override void Start(){
 		listener = GameObject.FindObjectOfType<AudioListener>();
@@ -77,6 +77,7 @@ public class PlanetBehavior : GravityBehavior {
 
 	void OnCollisionEnter2D(Collision2D collision){
 		if(collision.collider.tag == "Star"){
+			Instantiate(explosionObject, transform.position, Quaternion.identity);
 			Destroy(gameObject);
 			GravityManager.RemoveGravityObject(this);
 		}
