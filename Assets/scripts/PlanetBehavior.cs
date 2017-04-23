@@ -29,7 +29,8 @@ public class PlanetBehavior : GravityBehavior {
 		size = Random.Range(minSize, maxSize);
 		transform.localScale = Vector3.one * size;
 		UpdateMass(mass * size + 1);
-		planetAudio.pitch = 0.8f/size;
+		planetAudio.pitch = Mathf.Clamp(1.5f/size,.4f,1.5f);
+		planetAudio.volume = 0f;
 	}
 
 	void OnAwake() {
@@ -45,8 +46,8 @@ public class PlanetBehavior : GravityBehavior {
 		{
 			cutoff = Mathf.SmoothStep(cutoff, Mathf.Clamp((soundDistance-1f)*50f, 20f, 400f), 10*Time.deltaTime);
 			hiPass.cutoffFrequency = cutoff;
-			volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/100f)*0.3f + 0.7f*(listenerBody.velocity - body.velocity).sqrMagnitude/100f, 10*Time.deltaTime);
-			planetAudio.volume = Mathf.Clamp(volume, 0f, 0.7f);
+			volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/75f)*0.4f + 0.6f*(listenerBody.velocity - body.velocity).sqrMagnitude/75f, 10*Time.deltaTime);
+			planetAudio.volume = Mathf.Clamp(volume, 0f, 0.85f);
 		}
 	}
 
