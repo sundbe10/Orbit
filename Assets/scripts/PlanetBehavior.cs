@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class PlanetBehavior : GravityBehavior {
 
+	public GameObject offspring;
+	public int population;
+
+	void OnAwake() {
+		population = 0;
+	}
+
 	// Update is called once per frame
 	void Update () {
 		
@@ -15,5 +22,10 @@ public class PlanetBehavior : GravityBehavior {
 			GravityManager.RemoveGravityObject(this);
 		}
 	}
-		
+
+	public void SpawnOffspring(){
+		GameObject go = Instantiate(offspring, transform, false);
+		go.transform.RotateAround(transform.position, Vector3.forward, Random.Range(0f, 359f));
+		++population;
+	}
 }

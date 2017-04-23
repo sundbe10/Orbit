@@ -14,6 +14,7 @@ public class CharacterMovementBehavior : MonoBehaviour {
 	[HideInInspector] public bool isGrounded;
 	[HideInInspector] public GameObject attachedPlanet;
 	float characterGravityConstant = 10E-4f;
+	bool spawning;
 
 	// Use this for initialization
 	void Awake () {
@@ -21,6 +22,7 @@ public class CharacterMovementBehavior : MonoBehaviour {
 		gravVelocity = Vector2.zero;
 		isGrounded = false;
 		jumpForce = 0f;
+		spawning = false;
 	}
 	
 	// Update is called once per frame
@@ -80,6 +82,19 @@ public class CharacterMovementBehavior : MonoBehaviour {
 				attachedPlanet.GetComponent<Rigidbody2D>().AddForce(force);
 			}
 		}
+
+
+		// Spawning offspring
+		if (isGrounded && !spawning)
+		{
+			spawning = true;
+			StartCoroutine(SpawnOffspring(0.5f));
+		}
+		if (!isGrounded && spawning)
+		{
+			StopAllCoroutines();
+			spawning = false;
+		}
 	}
 
 	public void Fall(Vector2 force)
@@ -100,6 +115,16 @@ public class CharacterMovementBehavior : MonoBehaviour {
 			isGrounded = true;
 			jumpForce = maxjumpForce;
 			transform.parent = attachedPlanet.transform;
+		}
+	}
+
+	IEnumerator SpawnOffspring(float habitability){
+		PlanetBehavior planet = attachedPlanet.GetComponent<PlanetBehavior>();
+
+		while (spawning) {
+			float waitTimer = Random.Range(1f,2f)/habitability;
+			yield return new WaitForSeconds(waitTimer);
+			planet.SpawnOffspring();
 		}
 	}
 }
