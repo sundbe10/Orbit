@@ -9,13 +9,14 @@ public class PlanetBehavior : GravityBehavior {
 	public GameObject offspring;
 	public int population;
 	public GameObject[] planetTemplates;
+	public float size;
 
 	public override void Start(){
 		GameObject planet =  Instantiate(planetTemplates[(int)Mathf.Floor(Random.Range(0, planetTemplates.Length))], transform.position, Quaternion.identity) as GameObject;
 		planet.transform.parent = transform;
 
 		base.Start();
-		float size = Random.Range(minSize, maxSize);
+		size = Random.Range(minSize, maxSize);
 		Debug.Log(size);
 		transform.localScale = Vector3.one * size;
 		UpdateMass(mass * size + 1);

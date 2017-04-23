@@ -106,9 +106,11 @@ public class GravityManager : MonoBehaviour {
 		Vector2 pos1 = obj1.GetPosition();
 		Vector2 pos2 = character.GetPosition();
 
-		float radius = Vector2.Distance(pos1, pos2);
+		PlanetBehavior planet = obj1.GetComponent<PlanetBehavior>();
 
-		Vector2 force = (pos1 - pos2).normalized * (G * obj1.mass * character.mass) / (radius * radius);
+		float radius = Vector2.Distance(pos1, pos2) - planet.size;
+
+		Vector2 force = (pos1 - pos2).normalized * (G * planet.mass * character.mass) / (radius * radius);
 
 		if (apply)
 			character.GetComponent<CharacterMovementBehavior>().Fall(force);
@@ -118,7 +120,7 @@ public class GravityManager : MonoBehaviour {
 
 	void OnDrawGizmos()
 	{
-		if (character != null)
+		if (character != null && charMovement.attachedPlanet != null)
 		{
 			Gizmos.color = Color.yellow;
 			Gizmos.DrawSphere(charMovement.attachedPlanet.transform.position, 0.5f);

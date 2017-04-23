@@ -12,6 +12,9 @@ public class PlayerUIController : MonoBehaviour {
 	RectTransform healthbar;
 	GameObject healthBarObject;
 	Image healthbarImage;
+	RectTransform airSupply;
+	GameObject airSupplyObject;
+	public CharacterMovementBehavior character;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +22,8 @@ public class PlayerUIController : MonoBehaviour {
 		healthBarObject = transform.Find("HealthContainer/HealthBar").gameObject;
 		healthbar = healthBarObject.GetComponent<RectTransform>();
 		healthbarImage = healthBarObject.GetComponent<Image>();
+		airSupplyObject = transform.Find("AirContainer/AirBar").gameObject;
+		airSupply = airSupplyObject.GetComponent<RectTransform>();
 	}
 	
 	// Update is called once per frame
@@ -30,5 +35,7 @@ public class PlayerUIController : MonoBehaviour {
 		score.text = GameManager.years + " Million Years";
 		healthbar.localPosition = new Vector2(-500+500*GameManager.health/GameManager.maxHealth, 0);
 		healthbarImage.color = Color32.Lerp(failureColor, successColor, GameManager.health/GameManager.maxHealth);
+
+		airSupply.sizeDelta = new Vector2(40f, 250f*character.airSupply);
 	}	
 }

@@ -5,18 +5,19 @@ using UnityEngine;
 public class CharacterMovementBehavior : MonoBehaviour {
 
 	float acceleration = 5f;
-	float maxjumpForce = 1000f;
+	float maxjumpForce = 100f;
 	float pushForce = 1f;
 	float jumpForce;
 	float angVelocity;
 	Vector2 gravVelocity;
-	float maxSpeed = 1f;
+	float maxSpeed = 2f;
 	[HideInInspector] public bool isGrounded;
 	[HideInInspector] public GameObject attachedPlanet;
-	float characterGravityConstant = 10E-4f;
+	float characterGravityConstant = 10E-3f;
 	bool spawning;
 	public float airSupply;
 	ParticleSystem blowParticles;
+	Vector2 jumpVec;
 
 	// Use this for initialization
 	void Awake () {
@@ -25,8 +26,9 @@ public class CharacterMovementBehavior : MonoBehaviour {
 		isGrounded = false;
 		jumpForce = 0f;
 		spawning = false;
-		airSupply = 0f;
+		airSupply = 1f;
 		blowParticles = GetComponentInChildren<ParticleSystem>();
+		jumpVec = Vector2.zero;
 	}
 	
 	// Update is called once per frame
@@ -35,16 +37,16 @@ public class CharacterMovementBehavior : MonoBehaviour {
 		// Jumping
 		if (Input.GetButton("Jump") && jumpForce > 0f)
 		{
-			Vector2 jumpVec = (((Vector2)transform.position - (Vector2)attachedPlanet.transform.position) * jumpForce);
-			Fall(jumpVec);
-			jumpForce = Mathf.Lerp(jumpForce,0,15f*Time.deltaTime);
-
 			if (isGrounded)
 			{
+				jumpVec = (((Vector2)transform.position - (Vector2)attachedPlanet.transform.position));
 				gravVelocity += attachedPlanet.GetComponent<Rigidbody2D>().velocity;
 				isGrounded = false;
 				transform.parent = null;
 			}
+
+			Fall(jumpVec*jumpForce);
+			jumpForce = Mathf.Lerp(jumpForce,0,15f*Time.deltaTime);
 		}
 
 		Vector3 newPos = (Vector2)transform.position + gravVelocity*Time.deltaTime;
@@ -54,8 +56,6 @@ public class CharacterMovementBehavior : MonoBehaviour {
 			jumpForce = 0f;
 
 		// Walking
-		if (attachedPlanet != null)
-		{
 			if (Input.GetAxis("Horizontal") < 0 && angVelocity >  -maxSpeed)
 			{
 				angVelocity = Mathf.Lerp(angVelocity, -maxSpeed, acceleration*Time.deltaTime);
@@ -68,41 +68,40 @@ public class CharacterMovementBehavior : MonoBehaviour {
 				angVelocity = Mathf.Lerp(angVelocity, 0f, acceleration*Time.deltaTime);
 			else
 				angVelocity = 0f;
-			
-			float radius = Vector2.Distance((Vector2)transform.position, attachedPlanet.transform.position);
+
+		if (attachedPlanet != null)
+		{
+			PlanetBehavior planetBehavior = attachedPlanet.GetComponent<PlanetBehavior>();
+			float radius = Vector2.Distance((Vector2)transform.position, attachedPlanet.transform.position) - planetBehavior.size;
 			transform.RotateAround(attachedPlanet.transform.position, Vector3.forward, -angVelocity/(radius*radius));
 
 			
 			// Auto-turning
-			if (attachedPlanet != null)
-			{
-				Vector3 distanceVec = transform.position - attachedPlanet.transform.position;
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(distanceVec)), Mathf.Pow(1/distanceVec.magnitude,4f));
-			}
+			Vector3 distanceVec = transform.position - attachedPlanet.transform.position;
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(distanceVec)), Mathf.Pow(5f/distanceVec.magnitude,3f));
 
-			if (!isGrounded)
-				transform.rotation *= Quaternion.AngleAxis(Mathf.Clamp(radius*radius*radius*angVelocity, -20f, 20f)*-0.1f, Vector3.forward);
-			
-			// Blowing
-			if (Input.GetButton("Fire3") && airSupply > 0f)
+		}
+
+		if (!isGrounded)
+			transform.rotation *= Quaternion.AngleAxis(-Mathf.Clamp(angVelocity*3f, -20f, 20f), Vector3.forward);
+		
+		// Blowing
+		if (Input.GetButton("Fire3") && airSupply > 0f)
+		{
+			blowParticles.Play();
+			if (isGrounded)
 			{
-				blowParticles.Play();
-				if (isGrounded)
-				{
-					Vector2 force = (attachedPlanet.transform.position - transform.position).normalized*pushForce;
-					attachedPlanet.GetComponent<Rigidbody2D>().AddForce(force);
-				}
-				else
-				{
-					gravVelocity -= (Vector2)transform.up * 0.1f;
-					airSupply = airSupply > 0.0f ? airSupply -Time.deltaTime/2f : 0.0f;
-				}
+				Vector2 force = (attachedPlanet.transform.position - transform.position).normalized*pushForce;
+				attachedPlanet.GetComponent<Rigidbody2D>().AddForce(force);
 			}
 			else
-				blowParticles.Stop();
-
-			//Debug.Log(airSupply);
+			{
+				gravVelocity -= (Vector2)transform.up * 0.2f;
+				airSupply = airSupply > 0.0f ? airSupply -Time.deltaTime/3f : 0.0f;
+			}
 		}
+		else
+			blowParticles.Stop();
 
 
 		// Spawning offspring
@@ -126,11 +125,6 @@ public class CharacterMovementBehavior : MonoBehaviour {
 	public void Fall(Vector2 force)
 	{
 		gravVelocity += force*characterGravityConstant;
-	}
-
-	public void Jump(Vector2 force)
-	{
-		gravVelocity += force;
 	}
 
 	void OnTriggerEnter2D(Collider2D col)
