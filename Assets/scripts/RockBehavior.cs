@@ -33,8 +33,9 @@ public class RockBehavior : MonoBehaviour {
 		groundMesh = transform.Find("Ground").GetComponent<MeshRenderer>();
 		emitter = GetComponentInChildren<ParticleSystem>();
 		emitter.enableEmission = false;
+
 		collider = GetComponent<CircleCollider2D>();
-		collider.radius = collider.radius/transform.localScale.x;
+		collider.radius = collider.radius/transform.parent.localScale.x;
 
 		foreach(PlanetPhase planetPhase in planetPhases){
 			Material newGroundMaterial = new Material(Shader.Find("Standard"));

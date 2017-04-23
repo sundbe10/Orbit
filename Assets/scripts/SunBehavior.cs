@@ -43,6 +43,7 @@ public class SunBehavior: MonoBehaviour {
 	}
 
 	public void StartAging(){
+		Debug.Log("start againg");
 		canAge = true;
 	}
 
