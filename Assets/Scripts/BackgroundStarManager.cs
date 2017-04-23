@@ -41,8 +41,8 @@ public class BackgroundStarManager : MonoBehaviour {
 			float z = Random.Range(minDistance, maxDistance);
 			float frustrumHeight = FrustrumHeightAt(z);
 			float frustrumWidth = frustrumHeight * mainCamera.aspect;
-			float x = Random.Range(-0.5f*frustrumWidth, 0.5f*frustrumWidth);
-			float y = Random.Range(-0.5f*frustrumHeight, 0.5f*frustrumHeight);
+			float x = Random.Range(-1f*frustrumWidth, 1f*frustrumWidth);
+			float y = Random.Range(-1f*frustrumHeight, 1f*frustrumHeight);
 			s.transform.position = new Vector3(x,y,z);
 			float size = ScaledValue(z, minDistance, maxDistance);
 			s.transform.localScale *= size*5;
