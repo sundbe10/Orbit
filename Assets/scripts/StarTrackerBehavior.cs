@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class StarTrackerBehavior : MonoBehaviour {
 
-	public delegate void OnStarChangeDelegate (float distance);
-	public static event OnStarChangeDelegate OnStarLocated;
-	public static event OnStarChangeDelegate OnStarLeave;
 
 	// Use this for initialization
 	void Start () {
@@ -18,15 +15,5 @@ public class StarTrackerBehavior : MonoBehaviour {
 		
 	}
 
-	void OnTriggerStay2D(Collider2D collider){
-		if(collider.tag == "Star"){
-			OnStarLocated((transform.position - collider.transform.position).magnitude);
-		}
-	}
 
-	void OnTriggerExit2D(Collider2D collider){
-		if(collider.tag == "Star"){
-			OnStarLeave(0);
-		}
-	}
 }

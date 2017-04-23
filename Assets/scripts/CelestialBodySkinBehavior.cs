@@ -16,7 +16,7 @@ public class CelestialBodySkinBehavior : MonoBehaviour {
 	public PlanetComponent[] planetComponents;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		foreach(PlanetComponent planetComponent in planetComponents){
 			ChangeColor(planetComponent.component.GetComponent<MeshRenderer>(), planetComponent.saturationMin, planetComponent.saturationMax);
 		}

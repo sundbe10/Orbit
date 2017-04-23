@@ -9,8 +9,6 @@ public class GameManager : Singleton<GameManager> {
 	static public float maxHealth = 100;
 
 	int yearCounter;
-	float healthDecreaseSpeed = -0.05f;
-	float healthIncreaseSpeed = 0;
 
 	void Awake() {
 		if (Instance != this) {
@@ -20,9 +18,8 @@ public class GameManager : Singleton<GameManager> {
 
 	// Use this for initialization
 	void Start () {
-		StarTrackerBehavior.OnStarLeave += StarLeave;
-		StarTrackerBehavior.OnStarLocated += StarLocated;
-		healthIncreaseSpeed = healthDecreaseSpeed;
+		PlayerBehavior.OnHealthChange += HealthChange;
+		PlayerBehavior.OnSetHealth += SetHealth;
 	}
 	
 	// Update is called once per frame
@@ -36,18 +33,13 @@ public class GameManager : Singleton<GameManager> {
 			years++;
 			yearCounter = 0;
 		}
-
-		// change health
-		health += healthIncreaseSpeed + healthDecreaseSpeed;
-		if(health > maxHealth) health = maxHealth;
-		if(health < 0) health = 0;
 	}
 
-	void StarLocated(float distance){
-		healthIncreaseSpeed = 1/distance;
+	void SetHealth(float health){
+		maxHealth = health;
 	}
 
-	void StarLeave(float distance){
-		healthIncreaseSpeed = 0;
+	void HealthChange(float newHealth){
+		health = newHealth;
 	}
 }

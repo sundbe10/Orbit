@@ -15,7 +15,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		CreateSun();
-		CreatePlanets((int)Mathf.Floor(Random.Range(1,5)));
+		CreatePlanets((int)Mathf.Floor(Random.Range(1,8)));
 	}
 	
 	// Update is called once per frame
@@ -37,7 +37,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 
 	void CreatePlanet(){
 		float randomAngle = Random.Range(0,360);
-		float randomDistance = Random.Range(8,15);
+		float randomDistance = Random.Range(6,20);
 		Quaternion Rot = Quaternion.AngleAxis(randomAngle, Vector3.forward);
 		Vector3 planetVector = Rot * Vector3.right;
 		Vector3 planetPosition = sun.transform.position + planetVector * randomDistance;

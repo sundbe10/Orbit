@@ -33,7 +33,7 @@ public class SunBehavior: MonoBehaviour {
 		CloneMesh(topMesh);
 		CloneMesh(surfaceMesh);
 
-		currentLifetime = Random.Range(0, totalLifetime * 0.75f);
+		currentLifetime = Random.Range(0, totalLifetime * 0.5f);
 	}
 	
 	// Update is called once per frame
