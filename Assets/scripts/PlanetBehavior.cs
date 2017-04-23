@@ -11,6 +11,7 @@ public class PlanetBehavior : GravityBehavior {
 	public GameObject[] planetTemplates;
 
 	public override void Start(){
+
 		GameObject planet =  Instantiate(planetTemplates[(int)Mathf.Floor(Random.Range(0, planetTemplates.Length))], transform.position, Quaternion.identity) as GameObject;
 		planet.transform.parent = transform;
 
