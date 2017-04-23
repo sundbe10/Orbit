@@ -7,6 +7,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 
 	public GameObject sunObject;
 	public GameObject planetObject;
+	public bool ageImmediately = false;
 
 	private List<GameObject> planets = new List<GameObject>();
 	private GameObject sun;
@@ -25,6 +26,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 	void CreateSun(){
 		sun = Instantiate(sunObject, transform.position, Quaternion.identity) as GameObject;
 		sun.transform.parent = transform;
+		if(ageImmediately) sun.GetComponent<SunBehavior>().StartAging();
 	}
 
 	void CreatePlanets(int numPlanets){

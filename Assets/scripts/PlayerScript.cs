@@ -10,6 +10,7 @@ public class PlayerScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rigidBody = GetComponent<Rigidbody2D>();
+		rigidBody.AddForce(Vector2.up*10);
 	}
 	
 	// Update is called once per frame
