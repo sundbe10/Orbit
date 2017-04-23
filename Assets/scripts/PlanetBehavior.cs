@@ -18,7 +18,6 @@ public class PlanetBehavior : GravityBehavior {
 
 		base.Start();
 		size = Random.Range(minSize, maxSize);
-		Debug.Log(size);
 		transform.localScale = Vector3.one * size;
 		UpdateMass(mass * size + 1);
 	}

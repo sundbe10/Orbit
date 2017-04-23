@@ -24,6 +24,10 @@ public class GravityBehavior : MonoBehaviour {
 		body.mass = mass = newMass;
 	}
 
+	public virtual void UnregisterGravityObject(){
+		GravityManager.UnregisterGravityObject(this);
+	}
+
 	public Vector2 GetPosition()
 	{
 		return transform.position;

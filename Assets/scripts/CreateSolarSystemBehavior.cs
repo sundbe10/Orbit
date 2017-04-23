@@ -47,7 +47,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 
 		// Add normal force to create orbit 
 		Vector2 normalVector = new Vector2(planetVector.y, -planetVector.x);
-		newPlanet.GetComponent<Rigidbody2D>().velocity = normalVector * GetPlanetInitialVelocity(randomDistance, sun.GetComponent<Rigidbody2D>().mass); 
+		newPlanet.GetComponent<Rigidbody2D>().velocity = normalVector * GetPlanetInitialVelocity(randomDistance, sun.GetComponentInChildren<Rigidbody2D>().mass); 
 
 		planets.Add(newPlanet);
 	}

@@ -22,8 +22,8 @@ public class PlayerUIController : MonoBehaviour {
 		healthBarObject = transform.Find("HealthContainer/HealthBar").gameObject;
 		healthbar = healthBarObject.GetComponent<RectTransform>();
 		healthbarImage = healthBarObject.GetComponent<Image>();
-		airSupplyObject = transform.Find("AirContainer/AirBar").gameObject;
-		airSupply = airSupplyObject.GetComponent<RectTransform>();
+		//airSupplyObject = transform.Find("AirContainer/AirBar").gameObject;
+		//airSupply = airSupplyObject.GetComponent<RectTransform>();
 	}
 	
 	// Update is called once per frame
@@ -36,6 +36,6 @@ public class PlayerUIController : MonoBehaviour {
 		healthbar.localPosition = new Vector2(-500+500*GameManager.health/GameManager.maxHealth, 0);
 		healthbarImage.color = Color32.Lerp(failureColor, successColor, GameManager.health/GameManager.maxHealth);
 
-		airSupply.sizeDelta = new Vector2(40f, 250f*character.airSupply);
+		//airSupply.sizeDelta = new Vector2(40f, 250f*character.airSupply);
 	}	
 }
