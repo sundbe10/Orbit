@@ -15,6 +15,8 @@ public class CharacterMovementBehavior : MonoBehaviour {
 	[HideInInspector] public GameObject attachedPlanet;
 	float characterGravityConstant = 10E-4f;
 	bool spawning;
+	public float airSupply;
+	ParticleSystem blowParticles;
 
 	// Use this for initialization
 	void Awake () {
@@ -23,6 +25,8 @@ public class CharacterMovementBehavior : MonoBehaviour {
 		isGrounded = false;
 		jumpForce = 0f;
 		spawning = false;
+		airSupply = 0f;
+		blowParticles = GetComponentInChildren<ParticleSystem>();
 	}
 	
 	// Update is called once per frame
@@ -67,30 +71,52 @@ public class CharacterMovementBehavior : MonoBehaviour {
 			
 			float radius = Vector2.Distance((Vector2)transform.position, attachedPlanet.transform.position);
 			transform.RotateAround(attachedPlanet.transform.position, Vector3.forward, -angVelocity/(radius*radius));
+
 			
 			// Auto-turning
 			if (attachedPlanet != null)
 			{
 				Vector3 distanceVec = transform.position - attachedPlanet.transform.position;
-				transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(distanceVec)), Mathf.Pow(3/distanceVec.magnitude,3f));
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(Vector3.forward,(distanceVec)), Mathf.Pow(1/distanceVec.magnitude,4f));
 			}
+
+			if (!isGrounded)
+				transform.rotation *= Quaternion.AngleAxis(Mathf.Clamp(radius*radius*radius*angVelocity, -20f, 20f)*-0.1f, Vector3.forward);
 			
 			// Blowing
-			if (Input.GetButton("Fire3") && isGrounded)
+			if (Input.GetButton("Fire3") && airSupply > 0f)
 			{
-				Vector2 force = (attachedPlanet.transform.position - transform.position).normalized*pushForce;
-				attachedPlanet.GetComponent<Rigidbody2D>().AddForce(force);
+				blowParticles.Play();
+				if (isGrounded)
+				{
+					Vector2 force = (attachedPlanet.transform.position - transform.position).normalized*pushForce;
+					attachedPlanet.GetComponent<Rigidbody2D>().AddForce(force);
+				}
+				else
+				{
+					gravVelocity -= (Vector2)transform.up * 0.1f;
+					airSupply = airSupply > 0.0f ? airSupply -Time.deltaTime/2f : 0.0f;
+				}
 			}
+			else
+				blowParticles.Stop();
+
+			//Debug.Log(airSupply);
 		}
 
 
 		// Spawning offspring
-		if (isGrounded && !spawning)
+		if (isGrounded)
 		{
-			spawning = true;
-			StartCoroutine(SpawnOffspring(0.5f));
+			airSupply = airSupply < 1.0f ? airSupply +Time.deltaTime : 1.0f;
+			
+			if (!spawning)
+			{
+				spawning = true;
+				StartCoroutine(SpawnOffspring(0.5f));
+			}
 		}
-		if (!isGrounded && spawning)
+		else if (spawning)
 		{
 			StopAllCoroutines();
 			spawning = false;
