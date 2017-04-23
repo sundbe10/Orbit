@@ -70,17 +70,17 @@ public class GravityManager : MonoBehaviour {
 						}
 					}
 				}
+			}
 				
-				// Character-specific forces from each planet
-				if (character != null)
+			// Character-specific forces from each planet
+			if (character != null && giveObj.affectsPlayer)
+			{
+				Vector2 force = CalculateCharacterPull(giveObj, !charMovement.isGrounded);
+				
+				if (force.sqrMagnitude > maxCharacterPullForce.sqrMagnitude)
 				{
-					Vector2 force = CalculateCharacterPull(giveObj, !charMovement.isGrounded);
-					
-					if (force.sqrMagnitude > maxCharacterPullForce.sqrMagnitude)
-					{
-						maxCharacterPullForce = force;
-						charAttachedPlanet = giveObj.gameObject;
-					}
+					maxCharacterPullForce = force;
+					charAttachedPlanet = giveObj.gameObject;
 				}
 			}
 		}
