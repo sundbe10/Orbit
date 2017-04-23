@@ -21,6 +21,10 @@ public class GravityBehavior : MonoBehaviour {
 		//body.AddForce(new Vector2(Random.Range(-200f,200f), Random.Range(-200f,200f)));
 	}
 
+	public virtual void UpdateMass(float newMass){
+		body.mass = mass = newMass;
+	}
+
 	public Vector2 GetPosition()
 	{
 		return transform.position;

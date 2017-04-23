@@ -44,7 +44,6 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	void StarLocated(float distance){
-		Debug.Log(distance);
 		healthIncreaseSpeed = 1/distance;
 	}
 
