@@ -9,6 +9,7 @@ public class GravityBehavior : MonoBehaviour {
 	[HideInInspector] public float radius;
 	public bool hasGravity;
 	public bool isAffectedByGravity;
+	public bool affectsPlayer;
 
 	// Use this for initialization
 	public virtual void Start () {
