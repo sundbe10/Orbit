@@ -23,6 +23,7 @@ public class SunSoundBehavior : MonoBehaviour {
 		lowPass.cutoffFrequency = 1100f;
 		highPass.cutoffFrequency = 400f;
 		isCollapsing = false;
+		sunSound.spatialBlend = 1f;
 	}
 	
 	// Update is called once per frame

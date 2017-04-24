@@ -26,6 +26,7 @@ public class RockBehavior : MonoBehaviour {
 	private ParticleSystem emitter;
 	private SunBehavior sunBehavior;
 	private CircleCollider2D collider;
+	private AudioSource shineSound;
 
 	bool sunActive = false;
 
@@ -40,6 +41,7 @@ public class RockBehavior : MonoBehaviour {
 		groundMesh = transform.Find("Ground").GetComponent<MeshRenderer>();
 		emitter = GetComponentInChildren<ParticleSystem>();
 		emitter.enableEmission = false;
+		shineSound = GetComponent<AudioSource>();
 
 		collider = GetComponent<CircleCollider2D>();
 		collider.radius = collider.radius/transform.parent.localScale.x;
@@ -104,9 +106,40 @@ public class RockBehavior : MonoBehaviour {
 	void Shine(bool enable){
 		if(enable){
 			emitter.enableEmission = true;
+			if (!shineSound.isPlaying)
+			{
+				StopAllCoroutines();
+				shineSound.time = Random.Range(0f, 3f);
+				shineSound.pitch = Random.Range(.95f, 1.05f);
+				StartCoroutine(FadeShineSound(0.05f, .2f));
+			}
 		}else{
 			emitter.enableEmission = false;
+			if (shineSound.isPlaying)
+			{
+				StopAllCoroutines();
+				StartCoroutine(FadeShineSound(0f, .6f));
+			}
 		}
+	}
+
+	IEnumerator FadeShineSound(float targetVolume, float fadeTime)
+	{
+		if (!shineSound.isPlaying)
+			shineSound.Play();
+
+		float startVolume = shineSound.volume;
+		float timer = 0f;
+
+		while (shineSound.volume != targetVolume)
+		{
+			timer += Time.deltaTime/fadeTime;
+			shineSound.volume = Mathf.Lerp(startVolume, targetVolume, timer);
+			yield return null;
+		}
+
+		if (shineSound.volume <= 0)
+			shineSound.Stop();
 	}
 
 	void StartSunTracking(GameManager.State state){
