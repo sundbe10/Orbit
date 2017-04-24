@@ -27,8 +27,12 @@ public class RockBehavior : MonoBehaviour {
 	private SunBehavior sunBehavior;
 	private CircleCollider2D collider;
 
+	bool sunActive = false;
+
 	// Use this for initialization
 	void Start () {
+
+		GameManager.OnGameStateChange += StartSunTracking;
 
 		currentSunTime = maxSunTime/3;
 
@@ -54,7 +58,7 @@ public class RockBehavior : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		if(currentSunTime > 0) currentSunTime--;
+		if(currentSunTime > 0 && sunActive) currentSunTime--;
 		UpdatePhase();
 	}
 
@@ -79,7 +83,7 @@ public class RockBehavior : MonoBehaviour {
 		Debug.Log("collide");
 		if(collision.collider.tag == "Star"){
 			currentSunTime = 0;
-		}else if(collision.collider.tag == "Planet"){
+		}else if(collision.collider.tag == "Planet" && sunActive){
 			currentSunTime -= maxSunTime/6;
 		}
 	}
@@ -103,6 +107,14 @@ public class RockBehavior : MonoBehaviour {
 		}else{
 			emitter.enableEmission = false;
 		}
+	}
+
+	void StartSunTracking(GameManager.State state){
+		if(state == GameManager.State.ACTIVE) sunActive = true;
+	}
+
+	void OnDestroy(){
+		GameManager.OnGameStateChange -= StartSunTracking;
 	}
 
 }

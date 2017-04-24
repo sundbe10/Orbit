@@ -16,6 +16,11 @@ public class PlayerUIController : MonoBehaviour {
 	GameObject airSupplyObject;
 	public CharacterMovementBehavior character;
 
+
+	void Awake(){
+		GameManager.OnGameStateChange += GameStateChange;
+	}
+
 	// Use this for initialization
 	void Start () {
 		score = transform.Find("Score").GetComponent<Text>();
@@ -35,7 +40,9 @@ public class PlayerUIController : MonoBehaviour {
 		score.text = GameManager.years + " Million Years";
 		healthbar.localPosition = new Vector2(-500+500*GameManager.health/GameManager.maxHealth, 0);
 		healthbarImage.color = Color32.Lerp(failureColor, successColor, GameManager.health/GameManager.maxHealth);
-
-		//airSupply.sizeDelta = new Vector2(40f, 250f*character.airSupply);
 	}	
+
+	void GameStateChange(GameManager.State state){
+		
+	}
 }

@@ -27,7 +27,7 @@ public class ProceduralGridManager : Singleton<ProceduralGridManager> {
 
 	// Use this for initialization
 	void Start () {
-		Grid firstGrid = CreateGrid(playerObject.transform.position,0,0);
+		Grid firstGrid = CreateGrid(Vector3.zero,0,0);
 		firstGrid.gridObject.GetComponent<ProceduralGridBehavior>().proceduralObjects = new ProceduralGridBehavior.ProceduralObject[0];
 
 		CreateBorderGrids(firstGrid);
