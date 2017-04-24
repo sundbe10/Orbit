@@ -34,7 +34,6 @@ public class AsteroidController : MonoBehaviour {
 		yield return new WaitForSeconds(time);
 		StartCoroutine(SpawnAsteroids(Random.Range(spawnTimeMin,spawnTimeMax)));
 		Vector3 playerVector = playerObject.transform.position - transform.position;
-		Debug.Log(playerVector);
 		Vector3 normalVector = new Vector3(playerVector.y, -playerVector.x, 0).normalized;
 		if(playerVector.magnitude > 30){
 			int asteroidsToSpawn = (int)Mathf.Floor(Random.Range(1, numAsteroids));

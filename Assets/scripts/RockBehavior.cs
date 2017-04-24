@@ -83,7 +83,6 @@ public class RockBehavior : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision){
-		Debug.Log("collide");
 		if(collision.collider.tag == "Star"){
 			currentSunTime = 0;
 		}else if(collision.collider.tag == "Planet" && sunActive){

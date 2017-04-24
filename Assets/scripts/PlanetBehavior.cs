@@ -17,6 +17,7 @@ public class PlanetBehavior : GravityBehavior {
 	public float size;
 	public GameObject explosionObject;
 
+	GameObject playerObject;
 	AudioHighPassFilter hiPass;
 	AudioListener listener;
 	Rigidbody2D listenerBody;
@@ -27,6 +28,7 @@ public class PlanetBehavior : GravityBehavior {
 	public float distance;
 
 	public override void Start(){
+		playerObject = GameObject.FindGameObjectWithTag("Player");
 		listener = GameObject.FindObjectOfType<AudioListener>();
 		listenerBody = listener.GetComponent<Rigidbody2D>();
 		hiPass = GetComponent<AudioHighPassFilter>();
@@ -75,6 +77,7 @@ public class PlanetBehavior : GravityBehavior {
 			volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/50f)*0.3f + 0.7f*(listenerBody.velocity - body.velocity).sqrMagnitude/50f, 10*Time.deltaTime);
 			planetAudio.volume = Mathf.Clamp(volume, 0f, 0.9f);
 		}
+		CleanUp();
 	}
 
 	void OnCollisionEnter2D(Collision2D collision){
@@ -93,5 +96,12 @@ public class PlanetBehavior : GravityBehavior {
 	float ScaleClamp(float input, float inMin, float inMax, float outMin, float outMax)
 	{
 		return (((Mathf.Clamp(input, inMin, inMax) - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
+	}
+
+	void CleanUp(){
+		if(transform.parent.tag != "StarParent" && (playerObject.transform.position - transform.position).magnitude > 30){
+			Debug.Log("Clean up planet");
+			Destroy(gameObject);
+		}
 	}
 }
