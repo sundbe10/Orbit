@@ -65,6 +65,8 @@ public class PlanetBehavior : GravityBehavior {
 	}
 
 	void FixedUpdate () {
+		if (planetAudio.isVirtual)
+			return;
 		float soundDistance = Vector2.Distance(listener.transform.position, transform.position);
 		if (soundDistance < planetAudio.maxDistance)
 		{
