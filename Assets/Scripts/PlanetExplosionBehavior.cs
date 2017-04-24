@@ -11,8 +11,8 @@ public class PlanetExplosionBehavior : MonoBehaviour {
 	void Start () {
 		sound = GetComponent<AudioSource>();
 		sound.clip = sounds[Random.Range(0, sounds.Count)];
-		sound.pitch = Random.Range(.85f,.95f);
-		sound.volume = Random.Range(.9f,1f);
+		sound.pitch = Random.Range(.8f,.95f);
+		sound.volume = Random.Range(.8f,9f);
 		sound.Play();
 	}
 }
