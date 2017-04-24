@@ -12,6 +12,7 @@ public class SunBehavior: MonoBehaviour {
 		public Color materialColor;
 		[Range(0,8)]
 		public float size;
+		public float mass;
 	}
 
 	public StarPhase[] starPhases;
@@ -21,6 +22,7 @@ public class SunBehavior: MonoBehaviour {
 
 	float lifeCounter;
 	Transform bodyTransform;
+	GravityBehavior bodyGravityBehavior;
 	MeshRenderer topMesh;
 	MeshRenderer surfaceMesh;
 	bool canAge = false;
@@ -29,6 +31,7 @@ public class SunBehavior: MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		bodyTransform = transform.Find("Body");
+		bodyGravityBehavior = bodyTransform.gameObject.GetComponent<GravityBehavior>();
 		topMesh = transform.Find("Body/Top").GetComponent<MeshRenderer>();
 		surfaceMesh = transform.Find("Body/Surface").GetComponent<MeshRenderer>();
 		CloneMesh(topMesh);
@@ -68,6 +71,7 @@ public class SunBehavior: MonoBehaviour {
 			surfaceMesh.material.SetColor("_EmissionColor", Color32.Lerp(surfaceMesh.material.GetColor("_EmissionColor"), currentPhase.emissionColor, Time.deltaTime));
 
 			bodyTransform.localScale = Vector3.one * Mathf.Lerp(bodyTransform.localScale.x, currentPhase.size, Time.deltaTime);
+			bodyGravityBehavior.UpdateMass(currentPhase.mass);
 		}
 
 		if (currentPhase == starPhases[3] && !sunSound.isCollapsing)
@@ -83,7 +87,7 @@ public class SunBehavior: MonoBehaviour {
 	void Explode(){
 		GameObject explosion =  Instantiate(explosionObject, transform.position, Quaternion.identity);
 		explosion.transform.parent = transform.parent;
-		bodyTransform.gameObject.GetComponent<GravityBehavior>().UnregisterGravityObject();
+		bodyGravityBehavior.UnregisterGravityObject();
 		Destroy(bodyTransform.gameObject);
 
 		//Propel children
