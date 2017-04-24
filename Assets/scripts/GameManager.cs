@@ -17,6 +17,8 @@ public class GameManager : Singleton<GameManager> {
 	static public int years = 1;
 	static public float health = 100;
 	static public float maxHealth = 100;
+	static public int highScore;
+
 
 	int yearCounter;
 	State state;
@@ -39,6 +41,8 @@ public class GameManager : Singleton<GameManager> {
 
 	void OnLevelWasLoaded(){
 		if(SceneManager.GetActiveScene().name == "game"){
+			years = 1;
+			yearCounter = 0;
 			PlayerBehavior.OnHealthChange += HealthChange;
 			PlayerBehavior.OnSetHealth += SetHealth;
 			ChangeState(State.START);
@@ -61,6 +65,10 @@ public class GameManager : Singleton<GameManager> {
 		case State.END:
 			break;
 		}
+	}
+
+	static public State GetState(){
+		return Instance.state;
 	}
 
 	void WaitForStart(){
@@ -88,6 +96,7 @@ public class GameManager : Singleton<GameManager> {
 		health = newHealth;
 		if(health <= 0 ){
 			ChangeState(State.END);
+			if(years > highScore) highScore = years;
 			PlayerBehavior.OnHealthChange -= HealthChange;
 			PlayerBehavior.OnSetHealth -= SetHealth;
 		}

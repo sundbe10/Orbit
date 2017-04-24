@@ -10,9 +10,12 @@ public class GravityBehavior : MonoBehaviour {
 	public bool isAffectedByGravity;
 	public bool affectsPlayer;
 
+	void Awake(){
+		body = this.GetComponent<Rigidbody2D>();
+	}
+
 	// Use this for initialization
 	public virtual void Start () {
-		body = this.GetComponent<Rigidbody2D>();
 		mass = body.mass;
 		GravityManager.RegisterGravityObject(this);
 

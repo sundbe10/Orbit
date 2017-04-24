@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuMusicBehavior : MonoBehaviour {
 
@@ -15,5 +16,11 @@ public class MenuMusicBehavior : MonoBehaviour {
 	void Update () {
 		if (!music.isPlaying)
 			Destroy(gameObject);
+	}
+
+	void OnLevelWasLoaded(){
+		if(SceneManager.GetActiveScene().name == "game"){
+			Destroy(gameObject);
+		}
 	}
 }

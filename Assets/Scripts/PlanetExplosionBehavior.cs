@@ -14,5 +14,11 @@ public class PlanetExplosionBehavior : MonoBehaviour {
 		sound.pitch = Random.Range(.8f,.95f);
 		sound.volume = Random.Range(.8f,9f);
 		sound.Play();
+		StartCoroutine(DestroyExplosion());
+	}
+
+	IEnumerator DestroyExplosion(){
+		yield return new WaitForSeconds(5);
+		Destroy(gameObject);
 	}
 }

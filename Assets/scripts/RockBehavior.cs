@@ -34,6 +34,7 @@ public class RockBehavior : MonoBehaviour {
 	void Start () {
 
 		GameManager.OnGameStateChange += StartSunTracking;
+		if(GameManager.GetState() == GameManager.State.ACTIVE) sunActive = true;
 
 		currentSunTime = maxSunTime/2;
 

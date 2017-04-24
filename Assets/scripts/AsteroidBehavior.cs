@@ -11,10 +11,16 @@ public class AsteroidBehavior : MonoBehaviour {
 
 	void Start(){
 		transform.localScale = Random.Range(minSize, MaxSize) * Vector3.one;
+		StartCoroutine(CleanupAsteroid());
 	}
 
 	void OnCollisionEnter2D(Collision2D collision){
 		Instantiate(explosion, transform.position, Quaternion.identity);
+		Destroy(gameObject);
+	}
+
+	IEnumerator CleanupAsteroid(){
+		yield return new WaitForSeconds(10);
 		Destroy(gameObject);
 	}
 }
