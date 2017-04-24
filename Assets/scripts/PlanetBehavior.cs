@@ -65,13 +65,15 @@ public class PlanetBehavior : GravityBehavior {
 	}
 
 	void FixedUpdate () {
-		float soundDistance = Vector2.Distance(listener.transform.position, transform.position);
-		if (soundDistance < planetAudio.maxDistance)
-		{
-			cutoff = Mathf.SmoothStep(cutoff, Mathf.Clamp((soundDistance-1f)*50f, 20f, 400f), 10*Time.deltaTime);
-			hiPass.cutoffFrequency = cutoff;
-			volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/75f)*0.4f + 0.6f*(listenerBody.velocity - body.velocity).sqrMagnitude/75f, 10*Time.deltaTime);
-			planetAudio.volume = Mathf.Clamp(volume, 0f, 0.85f);
+		if(listener != null){
+			float soundDistance = Vector2.Distance(listener.transform.position, transform.position);
+			if (soundDistance < planetAudio.maxDistance)
+			{
+				cutoff = Mathf.SmoothStep(cutoff, Mathf.Clamp((soundDistance-1f)*50f, 20f, 400f), 10*Time.deltaTime);
+				hiPass.cutoffFrequency = cutoff;
+				volume = Mathf.SmoothStep(volume, (body.velocity.sqrMagnitude/75f)*0.4f + 0.6f*(listenerBody.velocity - body.velocity).sqrMagnitude/75f, 10*Time.deltaTime);
+				planetAudio.volume = Mathf.Clamp(volume, 0f, 0.85f);
+			}
 		}
 	}
 
@@ -79,7 +81,6 @@ public class PlanetBehavior : GravityBehavior {
 		if(collision.collider.tag == "Star"){
 			Instantiate(explosionObject, transform.position, Quaternion.identity);
 			Destroy(gameObject);
-			GravityManager.RemoveGravityObject(this);
 		}
 	}
 

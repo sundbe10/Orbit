@@ -32,4 +32,8 @@ public class GravityBehavior : MonoBehaviour {
 	{
 		return transform.position;
 	}
+
+	public virtual void OnDestroy(){
+		GravityManager.UnregisterGravityObject(this);
+	}
 }

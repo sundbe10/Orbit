@@ -80,7 +80,7 @@ public class RockBehavior : MonoBehaviour {
 		if(collision.collider.tag == "Star"){
 			currentSunTime = 0;
 		}else if(collision.collider.tag == "Planet"){
-			currentSunTime -= maxSunTime/8;
+			currentSunTime -= maxSunTime/6;
 		}
 	}
 

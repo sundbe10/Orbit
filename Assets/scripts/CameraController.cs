@@ -22,8 +22,10 @@ public class CameraController : MonoBehaviour {
 	// LateUpdate is called after Update each frame
 	void LateUpdate () 
 	{
-		transform.position = player.transform.position + offset;
-		mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, starNearby ? wideCameraFoV : narrowCameraFoV, Time.deltaTime);
+		if(player != null){
+			transform.position = player.transform.position + offset;
+			mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, starNearby ? wideCameraFoV : narrowCameraFoV, Time.deltaTime);
+		}
 	}
 
 	void OnTriggerStay2D(Collider2D collider){
