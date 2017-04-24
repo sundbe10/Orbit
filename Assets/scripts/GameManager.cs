@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager> {
 
@@ -26,6 +27,7 @@ public class GameManager : Singleton<GameManager> {
 		if (Instance != this) {
 			Destroy(this.gameObject);
 		}
+		DontDestroyOnLoad(gameObject);
 	}
 
 	// Use this for initialization
@@ -33,6 +35,14 @@ public class GameManager : Singleton<GameManager> {
 		PlayerBehavior.OnHealthChange += HealthChange;
 		PlayerBehavior.OnSetHealth += SetHealth;
 		ChangeState(State.START);
+	}
+
+	void OnLevelWasLoaded(){
+		if(SceneManager.GetActiveScene().name == "game"){
+			PlayerBehavior.OnHealthChange += HealthChange;
+			PlayerBehavior.OnSetHealth += SetHealth;
+			ChangeState(State.START);
+		}
 	}
 	
 	// Update is called once per frame
@@ -54,7 +64,10 @@ public class GameManager : Singleton<GameManager> {
 	}
 
 	void WaitForStart(){
-		if(Input.GetKeyDown("Confirm")){
+		if(Input.GetButtonDown("Submit")){
+			ChangeState(State.ACTIVE);
+		}
+		if(Input.anyKeyDown){
 			ChangeState(State.ACTIVE);
 		}
 	}
@@ -75,11 +88,14 @@ public class GameManager : Singleton<GameManager> {
 		health = newHealth;
 		if(health <= 0 ){
 			ChangeState(State.END);
+			PlayerBehavior.OnHealthChange -= HealthChange;
+			PlayerBehavior.OnSetHealth -= SetHealth;
 		}
 	}
 
 	void ChangeState(State newState){
-		OnGameStateChange(state);
+		Debug.Log(newState);
+		OnGameStateChange(newState);
 		state = newState;
 	}
 }

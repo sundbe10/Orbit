@@ -7,17 +7,20 @@ public class PlayerUIController : MonoBehaviour {
 
 	public Color32 successColor;
 	public Color32 failureColor;
+	public CharacterMovementBehavior character;
 
+	Animator animator;
 	Text score;
 	RectTransform healthbar;
 	GameObject healthBarObject;
 	Image healthbarImage;
 	RectTransform airSupply;
 	GameObject airSupplyObject;
-	public CharacterMovementBehavior character;
+
 
 
 	void Awake(){
+		animator = GetComponent<Animator>();
 		GameManager.OnGameStateChange += GameStateChange;
 	}
 
@@ -43,6 +46,17 @@ public class PlayerUIController : MonoBehaviour {
 	}	
 
 	void GameStateChange(GameManager.State state){
-		
+		switch(state){
+		case GameManager.State.ACTIVE:
+			animator.SetBool("startGame", true);	
+			break;
+		case GameManager.State.END:
+			animator.SetBool("fadeOut", true);
+			break;
+		}
+	}
+
+	void OnDestroy(){
+		GameManager.OnGameStateChange -= GameStateChange;
 	}
 }

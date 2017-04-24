@@ -34,7 +34,7 @@ public class RockBehavior : MonoBehaviour {
 
 		GameManager.OnGameStateChange += StartSunTracking;
 
-		currentSunTime = maxSunTime/3;
+		currentSunTime = maxSunTime/2;
 
 		cloudMesh = transform.Find("Clouds").GetComponent<MeshRenderer>();
 		groundMesh = transform.Find("Ground").GetComponent<MeshRenderer>();
@@ -63,7 +63,7 @@ public class RockBehavior : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D collider){
-		if(collider.tag == "Star"){
+		if(collider.tag == "Star" && sunActive){
 			if((collider.transform.position - transform.position).magnitude > collider.transform.localScale.x){
 				if(currentSunTime < maxSunTime) currentSunTime += 20/(collider.transform.position - transform.position).magnitude;
 				Shine(true);

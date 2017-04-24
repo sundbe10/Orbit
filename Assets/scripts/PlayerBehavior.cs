@@ -53,14 +53,13 @@ public class PlayerBehavior : MonoBehaviour {
 	}
 
 	void GameStateChange(GameManager.State state){
-		Debug.Log(state);
 		switch(state){
 		case GameManager.State.START:
 			rigidBody.isKinematic = true;
 			break;
 		case GameManager.State.ACTIVE:
 			rigidBody.isKinematic = false;
-			rigidBody.AddForce(Vector2.one *20);
+			rigidBody.AddForce(Vector2.up * 100f);
 			ChangeState(State.ACTIVE);
 			break;
 		case GameManager.State.END:
