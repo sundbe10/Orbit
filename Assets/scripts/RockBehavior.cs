@@ -68,7 +68,7 @@ public class RockBehavior : MonoBehaviour {
 	void OnTriggerStay2D(Collider2D collider){
 		if(collider.tag == "Star" && sunActive){
 			if((collider.transform.position - transform.position).magnitude > collider.transform.localScale.x){
-				if(currentSunTime < maxSunTime) currentSunTime += 18/(collider.transform.position - transform.position).magnitude;
+				if(currentSunTime < maxSunTime) currentSunTime += 20/(collider.transform.position - transform.position).magnitude;
 				Shine(true);
 			}else{
 				Shine(false);
