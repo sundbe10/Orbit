@@ -33,7 +33,7 @@ public class PlayerBehavior : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if(state == State.ACTIVE){
-			rigidBody.AddForce(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized*6);
+			rigidBody.AddForce(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized*9);
 		}
 
 		OnSetHealth(planet.maxSunTime);
