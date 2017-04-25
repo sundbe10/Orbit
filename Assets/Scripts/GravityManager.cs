@@ -61,7 +61,7 @@ public class GravityManager : MonoBehaviour {
 				Collider2D col1 = giveObj.GetComponent<Collider2D>();
 				foreach(GravityBehavior receiveObj in gravityObjects)
 				{
-					if (giveObj != receiveObj && (receiveObj.transform.parent == giveObj.transform.parent || receiveObj.tag == "Player" ))
+					if (giveObj != receiveObj && (receiveObj.transform.parent == giveObj.transform.parent || receiveObj.tag == "Player" || receiveObj.transform.parent.tag != "StarParent" ))
 					{
 						Collider2D col2 = receiveObj.GetComponent<Collider2D>();
 						if (!col1.IsTouching(col2) && receiveObj.isAffectedByGravity)

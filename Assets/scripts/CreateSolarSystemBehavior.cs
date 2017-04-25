@@ -15,7 +15,7 @@ public class CreateSolarSystemBehavior : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		CreateSun();
-		CreatePlanets((int)Mathf.Floor(Random.Range(1,8)));
+		CreatePlanets((int)Mathf.Floor(Random.Range(3,7)));
 	}
 	
 	// Update is called once per frame
